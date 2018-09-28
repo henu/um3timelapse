@@ -3,13 +3,24 @@ Ultimaker 3 Timelapse Maker
 
 A script that makes timelapse videos from the onboard camera on your Ultimaker 3.
 
-![Bulbasaur](https://thumbs.gfycat.com/EntireGlassAlaskanmalamute-size_restricted.gif)
+This Fork of unlimitedbacon's repository contains code that lets your Ultimaker 3 take those timelapses where it looks like the 3D print is building from nothing instead of seeing the head move all around.
+
+[YouTube Video Test](https://youtu.be/NAAGY1Z1AdE)
+
+## CHANGES FROM ORIGINAL:
+
+Usage remains the same, and currently this will only work superbly well with one material. Load nothing material in Extruder 2 so nothing comes out of the nozzle, but make the printer thing there is something loaded. In my case that's PLA. Next, place an object to be printed on Extruder 2 out of the way of your main model and resize it to the height of your model with the X and Y being 1 and 1.
+
+You can put any number for the delay, that option will be removed soon.
+
 
 Usage
 -----
 ```
-$ ./timelapse.py HOST DELAY OUTFILE
+$ ./timelapse.py HOST 1 OUTFILE
 ```
+
+
 
 This script requires Python 3.5 or later and [FFmpeg](https://ffmpeg.org/).
 Run the script. It will wait for your Ultimaker to begin printing, then it will start taking pictures.
