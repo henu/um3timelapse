@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 import os
 import argparse
 from requests import exceptions
@@ -6,7 +6,7 @@ from tempfile import mkdtemp
 from time import sleep
 from urllib.request import urlopen
 from um3api import Ultimaker3
-import json.loads as loads
+import json
 
 cliParser = argparse.ArgumentParser(description=
 			'Creates a time lapse video from the onboard camera on your Ultimaker 3.')
@@ -89,9 +89,10 @@ while printing():
 	print("Print progress: %s Image: %05i" % (progress(), count), end='\r')
 	# sleep(options.DELAY)
 	#sleep while printing a layer, wait for extruder position change
-	while not location_check(loads(api.get("api/v1/printer/heads/0/position"))):
-		time.sleep(1) #213 189
-		#or 209.375 193.0
+	while not location_check(api.get("api/v1/printer/heads/0/position").json()) and printing():
+		sleep(1) #213 189 <-- 
+		#or 209.375 193.0 
+	sleep(5) # I think this is necessary because of the way the printer cools down and reheats the print cores between switching. To prevent taking multiple pictures of the same layer.
 
 print()
 print(":: Print completed")
