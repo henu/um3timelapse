@@ -94,6 +94,16 @@ while printing():
 		#or 209.375 193.0 
 	sleep(5) # I think this is necessary because of the way the printer cools down and reheats the print cores between switching. To prevent taking multiple pictures of the same layer.
 
+#caputre a few frames of postroll
+for x in xrange(1,30):
+	count += 1
+	response = urlopen(imgurl)
+	filename = filenameformat % count
+	f = open(filename,'bw')
+	f.write(response.read())
+	f.close
+	sleep(1)
+
 print()
 print(":: Print completed")
 print(":: Encoding video")
