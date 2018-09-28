@@ -11,6 +11,8 @@ This Fork of unlimitedbacon's repository contains code that lets your Ultimaker 
 
 Usage remains the same, and currently this will only work superbly well with one material. Load nothing material in Extruder 2 so nothing comes out of the nozzle, but make the printer thing there is something loaded. In my case that's PLA. Next, place an object to be printed on Extruder 2 out of the way of your main model and resize it to the height of your model with the X and Y being 1 and 1.
 
+![screenshot](https://github.com/starbuck93/um3timelapse/raw/master/screenshot.png)
+
 You can put any number for the delay, that option will be removed soon.
 
 
