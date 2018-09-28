@@ -6,6 +6,7 @@ from tempfile import mkdtemp
 from time import sleep
 from urllib.request import urlopen
 from um3api import Ultimaker3
+import json.loads as loads
 
 cliParser = argparse.ArgumentParser(description=
 			'Creates a time lapse video from the onboard camera on your Ultimaker 3.')
@@ -56,6 +57,14 @@ def print_error(err):
 	print()
 	sleep(1)
 
+def location_check(json_object):
+	x = json_object["x"]
+	y = json_object["y"]
+	if x == 213:
+		if y == 189:
+			return True
+	
+
 tmpdir = mkdtemp()
 filenameformat = os.path.join(tmpdir, "%05d.jpg")
 print(":: Saving images to",tmpdir)
@@ -78,7 +87,11 @@ while printing():
 	f.write(response.read())
 	f.close
 	print("Print progress: %s Image: %05i" % (progress(), count), end='\r')
-	sleep(options.DELAY)
+	# sleep(options.DELAY)
+	#sleep while printing a layer, wait for extruder position change
+	while not location_check(loads(api.get("api/v1/printer/heads/0/position"))):
+		time.sleep(1) #213 189
+		#or 209.375 193.0
 
 print()
 print(":: Print completed")
