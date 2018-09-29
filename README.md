@@ -24,10 +24,10 @@ $ ./timelapse.py HOST 1 OUTFILE
 
 
 
-This script requires Python 3.5 or later and [FFmpeg](https://ffmpeg.org/).
-Run the script. It will wait for your Ultimaker to begin printing, then it will start taking pictures when the printhead moves out of the way of the print. Theoretically it will only take one picture per layer.
-When the print finishes, the script will compile all the snapshots it took into a video.
-Video is encoded using H.264 at 30 fps, but you can easily change this by editing `ffmpegcmd` in the script.
+ - This script requires Python 3.5 or later and [FFmpeg](https://ffmpeg.org/).
+ - Run the script. It will wait for your Ultimaker to begin printing, then it will start taking pictures when the printhead moves out of the way of the print. Theoretically it will only take one picture per layer.
+ - When the print finishes, the script will compile all the snapshots it took into a video.
+ - Video is encoded using H.264 at 30 fps, but you can easily change this by editing `ffmpegcmd` in the script.
 
 | Option  | Description |
 | ------- | ----------- |
