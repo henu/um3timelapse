@@ -1,9 +1,7 @@
 Ultimaker 3 Timelapse Maker
 ===========================
 
-A script that makes timelapse videos from the onboard camera on your Ultimaker 3.
-
-This Fork of unlimitedbacon's repository contains code that lets your Ultimaker 3 take those timelapses where it looks like the 3D print is building from nothing instead of seeing the head move all around.
+A script that makes Octolapse-style timelapse videos from the onboard camera on your Ultimaker 3 using nothing but software.
 
 [YouTube Video Test](https://youtu.be/NAAGY1Z1AdE)
 
