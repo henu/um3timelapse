@@ -113,4 +113,4 @@ print(":: Encoding video")
 ffmpegcmd = "ffmpeg -r 30 -i " + filenameformat + " -vcodec libx264 -preset veryslow -crf 18 -loglevel panic " + options.OUTFILE
 print(ffmpegcmd)
 os.system(ffmpegcmd)
-print(:: "Done!")
+print(":: Done!")
