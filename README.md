@@ -3,7 +3,9 @@ Ultimaker 3 Timelapse Maker
 
 A script that makes Octolapse-style timelapse videos from the onboard camera on your Ultimaker 3 using nothing but software.
 
-[YouTube Video Test](https://youtu.be/NAAGY1Z1AdE)
+[YouTube Calibration Cube Test #2](https://youtu.be/NAAGY1Z1AdE)
+
+[YouTube Thanos Bust Test #3](https://www.youtube.com/watch?v=d-KTteCeCCQ)
 
 ### CHANGES FROM ORIGINAL:
 
