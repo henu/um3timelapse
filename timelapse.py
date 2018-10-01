@@ -12,8 +12,8 @@ cliParser = argparse.ArgumentParser(description=
 			'Creates a time lapse video from the onboard camera on your Ultimaker 3.')
 cliParser.add_argument('HOST', type=str,
 			help='IP address of the Ultimaker 3')
-cliParser.add_argument('DELAY', type=float,
-			help='Time between snapshots in seconds')
+cliParser.add_argument('POST_SEC', type=float,
+			help='Seconds of postroll, or how much time to capture after the print is completed.')
 cliParser.add_argument('OUTFILE', type=str,
 			help='Name of the video file to create. Recommended formats are .mkv or .mp4.')
 options = cliParser.parse_args()
@@ -95,18 +95,22 @@ while printing():
 	sleep(5) # I think this is necessary because of the way the printer cools down and reheats the print cores between switching. To prevent taking multiple pictures of the same layer.
 
 #caputre a few frames of postroll
-for x in range(0, 30):
+print()
+print(":: Printing Completed or Cancelled") #maybe I should write some code to detect when a print was cancelled
+post_frames = 30 * options.POST_SEC
+for x in range(0, int(post_frames)):
 	count += 1
 	response = urlopen(imgurl)
 	filename = filenameformat % count
 	f = open(filename,'bw')
 	f.write(response.read())
 	f.close
-	sleep(1)
+	print("Post-Print Capture progress: %05i Image: %05i" % (x, count), end='\r')
+	sleep(0.1)
 
 print()
-print(":: Print completed")
 print(":: Encoding video")
-ffmpegcmd = "ffmpeg -r 30 -i " + filenameformat + " -vcodec libx264 -preset veryslow -crf 18 " + options.OUTFILE
+ffmpegcmd = "ffmpeg -r 30 -i " + filenameformat + " -vcodec libx264 -preset veryslow -crf 18 -loglevel panic " + options.OUTFILE
 print(ffmpegcmd)
 os.system(ffmpegcmd)
+print(:: "Done!")

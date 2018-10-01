@@ -11,17 +11,15 @@ A script that makes Octolapse-style timelapse videos from the onboard camera on 
 
 People have been using an Octoprint plugin, Octolapse, to do this on their Prusa and other 3D printers already, but few have done this trick on an Ultimaker. I stumbled upon a post in the Ultimaker 3 Support group on Facebook and it led to this [Thingiverse page](https://www.thingiverse.com/thing:3121227). My main thing was I knew that unlimitedbacon's code worked (really well) and I liked the idea of moving the head out of the way to take a picture. Using this repository, you don't have to print anything extra to mount another camera to your printer. The only major changes are printing a dummy object on Extruder 2 and running this Python script somewhere.
 
-Usage remains the same, and currently this will only work superbly well with one material. Load nothing material in Extruder 2 so nothing comes out of the nozzle, but make the printer thing there is something loaded. In my case that's PLA. Next, place an object to be printed on Extruder 2 out of the way of your main model and resize it to the height of your model with the X and Y being 1 and 1.
+Usage remains nearly the same, and currently this will only work superbly well with one material. Load nothing material in Extruder 2 so nothing comes out of the nozzle, but make the printer think there is something loaded. In my case that's PLA. Next, place an object to be printed on Extruder 2 out of the way of your main model and resize it to the height of your model with the X and Y being 1 and 1.
 
 ![screenshot](https://github.com/starbuck93/um3timelapse/raw/master/screenshot.png)
-
-You can put any number for the delay, that option will be removed soon.
 
 
 Usage
 -----
 ```
-$ ./timelapse.py HOST 1 OUTFILE
+$ ./timelapse.py HOST POST_SEC OUTFILE
 ```
 
 
@@ -34,7 +32,7 @@ $ ./timelapse.py HOST 1 OUTFILE
 | Option  | Description |
 | ------- | ----------- |
 | HOST    | The IP address of your Ultimaker 3. You can find this through the menu by going to System > Network > Connection Status. |
-| DELAY   | Not used in this repository. I put a `1` here so the code doesn't freak out. |
+| POST_SEC   | Seconds of postroll, or how much time to capture after the print is completed. `POST_SEC` is multiplied by 30 frames per second to add a number of frames. `1` is recommended here. |
 | OUTFILE | This is the name of the video file you want to make. I recommend giving it either a .mkv or .mp4 extension, although you could choose any container format that supports H.264. |
 
 Thanks
