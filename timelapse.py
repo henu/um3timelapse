@@ -57,13 +57,22 @@ def print_error(err):
 	print()
 	sleep(1)
 
-def location_check(json_object):
+def location_check(json_object, variant):
 	x = json_object["x"]
 	y = json_object["y"]
-	if x == 213:
-		if y == 189:
-			return True
-	
+	if variant == "Ultimaker 3":
+		if x == 213:
+			if y == 189:
+				return True
+	elif variant == "Ultimaker S5": 
+		if x == 330:
+			if y == 219:
+				return True
+
+def get_variant():
+	variant = api.get("api/v1/system/variant").json()
+	return variant
+
 
 tmpdir = mkdtemp()
 filenameformat = os.path.join(tmpdir, "%05d.jpg")
@@ -71,6 +80,10 @@ print(":: Saving images to",tmpdir)
 
 if not os.path.exists(tmpdir):
 	os.makedirs(tmpdir)
+
+print(":: Getting machine type")
+variant = get_variant()
+print(":: Found", variant)
 
 print(":: Waiting for print to start")
 while not printing():
@@ -89,7 +102,7 @@ while printing():
 	print("Print progress: %s Image: %05i" % (progress(), count), end='\r')
 	# sleep(options.DELAY)
 	#sleep while printing a layer, wait for extruder position change
-	while not location_check(api.get("api/v1/printer/heads/0/position").json()) and printing():
+	while not location_check(api.get("api/v1/printer/heads/0/position").json(), variant) and printing():
 		sleep(1) #213 189 <-- 
 		#or 209.375 193.0 
 	sleep(5) # I think this is necessary because of the way the printer cools down and reheats the print cores between switching. To prevent taking multiple pictures of the same layer.
