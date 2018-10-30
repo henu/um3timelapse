@@ -1,5 +1,6 @@
 #!/bin/python3
 import os
+import sys
 import argparse
 import math
 from requests import exceptions
@@ -40,9 +41,9 @@ time_between_frames = print_time_input / (video_length_input*30)
 new_delay = 0
 if math.fabs(time_between_frames - options.DELAY) > 10:
 	print("Warning, it looks like the input DELAY and the calculated delay are very different. Do you want to use the command line DELAY or the calculated delay?")
-	print ("Enter \"1\" for command line DELAY")
-	print ("Enter \"2\" for calculated delay")
-	re = input("Response: ")
+	print ("Enter \"1\" for command line DELAY of " + options.DELAY)
+	print ("Enter \"2\" for calculated delay of " + video_length_input/time_between_frames)
+	re = int(input("Response: "))
 	if re == 1:
 		print("Using cmd line DELAY")
 		new_delay = options.DELAY
@@ -58,7 +59,7 @@ print(":: Starting Timelapse")
 
 count = 0
 
-while count < options.LENGTH/options.DELAY: # I think this will work
+while count < options.LENGTH/new_delay: # I think this will work
 	count += 1
 	response = urlopen(imgurl)
 	filename = filenameformat % count
