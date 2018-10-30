@@ -38,21 +38,22 @@ if not video_length_input and not print_time_input:
 	sys.exit()
 
 time_between_frames = print_time_input / (video_length_input*30)
-new_delay = 0
+new_delay = options.DELAY
+
 if math.fabs(time_between_frames - options.DELAY) > 10:
-	print("Warning, it looks like the input DELAY and the calculated delay are very different. Do you want to use the command line DELAY or the calculated delay?")
-	print ("Enter \"1\" for command line DELAY of " + str(options.DELAY))
-	print ("Enter \"2\" for calculated delay of " + str(time_between_frames))
-	re = int(input("Response: "))
-	if re == 1:
-		print("Using cmd line DELAY")
-		new_delay = options.DELAY
-	elif re == 2:
-		print("Using calculated delay")
-		new_delay = time_between_frames
-	else:
-		print("Got bad response... quitting")
-		sys.exit()
+	print("Warning, it looks like the input DELAY and the calculated delay are different.")
+print("Do you want to use the command line DELAY or the calculated delay?")
+print ("    Enter \"1\" for command line DELAY of " + str(options.DELAY))
+print ("    Enter \"2\" for calculated delay of " + str(time_between_frames))
+re = int(input("Response: "))
+if re == 1:
+	print("Using cmd line DELAY")
+elif re == 2:
+	print("Using calculated delay")
+	new_delay = time_between_frames
+else:
+	print("Got bad response... quitting")
+	sys.exit()
 
 
 print(":: Starting Timelapse")
