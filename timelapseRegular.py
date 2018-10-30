@@ -39,7 +39,7 @@ if not video_length_input and not print_time_input:
 
 time_between_frames = print_time_input / (video_length_input*30)
 new_delay = options.DELAY
-new_length = optoins.LENGTH
+new_length = options.LENGTH
 
 if math.fabs(time_between_frames - options.DELAY) > 10:
 	print("Warning, it looks like the input DELAY and the calculated delay are different.")
