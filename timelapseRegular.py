@@ -69,7 +69,7 @@ while count < new_length/new_delay: # I think this will work
 	f = open(filename,'bw')
 	f.write(response.read())
 	f.close
-	print("Image: %05i" % (count), end='\r')
+	print("Progress: %03i%. Image: %05i" % ((count/(new_length/new_delay))*100,count), end='\r')
 	sleep(new_delay)
 
 print()
