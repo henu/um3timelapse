@@ -39,6 +39,7 @@ if not video_length_input and not print_time_input:
 
 time_between_frames = print_time_input / (video_length_input*30)
 new_delay = options.DELAY
+new_length = optoins.LENGTH
 
 if math.fabs(time_between_frames - options.DELAY) > 10:
 	print("Warning, it looks like the input DELAY and the calculated delay are different.")
@@ -51,6 +52,7 @@ if re == 1:
 elif re == 2:
 	print("Using calculated delay")
 	new_delay = time_between_frames
+	new_length = print_time_input
 else:
 	print("Got bad response... quitting")
 	sys.exit()
@@ -60,7 +62,7 @@ print(":: Starting Timelapse")
 
 count = 0
 
-while count < options.LENGTH/new_delay: # I think this will work
+while count < new_length/new_delay: # I think this will work
 	count += 1
 	response = urlopen(imgurl)
 	filename = filenameformat % count
