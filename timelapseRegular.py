@@ -29,8 +29,12 @@ if not os.path.exists(tmpdir):
 	os.makedirs(tmpdir)
 
 print("How long do you want your timelapse to be? For example, if you enter \"10\" then you will get a 10 second video.")
-video_length_input = input("How long do you want the video to be?")
-print_time_input = input("How long is the print in seconds? For example, 5 hours is 18000.")
+video_length_input = int(input("How long do you want your timelapse to be? "))
+print_time_input = int(input("How long is the print in seconds? "))
+
+if not video_length_input and not print_time_input:
+	print("Got bad response... quitting")
+	sys.exit()
 
 time_between_frames = print_time_input / (video_length_input*30)
 new_delay = 0
