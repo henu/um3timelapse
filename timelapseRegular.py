@@ -41,8 +41,8 @@ time_between_frames = print_time_input / (video_length_input*30)
 new_delay = 0
 if math.fabs(time_between_frames - options.DELAY) > 10:
 	print("Warning, it looks like the input DELAY and the calculated delay are very different. Do you want to use the command line DELAY or the calculated delay?")
-	print ("Enter \"1\" for command line DELAY of " + options.DELAY)
-	print ("Enter \"2\" for calculated delay of " + video_length_input/time_between_frames)
+	print ("Enter \"1\" for command line DELAY of " + str(options.DELAY))
+	print ("Enter \"2\" for calculated delay of " + str(video_length_input/time_between_frames))
 	re = int(input("Response: "))
 	if re == 1:
 		print("Using cmd line DELAY")
