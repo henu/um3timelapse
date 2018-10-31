@@ -29,7 +29,7 @@ imgurl = "http://" + options.HOST + ":8080/?action=snapshot"
 
 def percent():
 	r = requests.get('http://' + str(options.PHOST) + '/rr_connect?password=' + str(options.PASSWORD))
-	percent = float(requests.get('http://' + str(options.HOST) + '/rr_status?type=3').json()["fractionPrinted"])
+	percent = float(requests.get('http://' + str(options.PHOST) + '/rr_status?type=3').json()["fractionPrinted"])
 	return percent
 
 def printing():
