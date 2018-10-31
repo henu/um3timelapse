@@ -3,6 +3,7 @@ import os
 import sys
 import argparse
 import math
+import requests
 from requests import exceptions
 from tempfile import mkdtemp
 from time import sleep
@@ -12,6 +13,10 @@ cliParser = argparse.ArgumentParser(description=
 			'Creates a time lapse video from a mjpg-streamer camera.')
 cliParser.add_argument('HOST', type=str,
 			help='IP address of the camera')
+cliParser.add_argument('PHOST', type=str,
+			help='IP address of the Duet 3D printer board')
+cliParser.add_argument('PASSWORD', type=str,
+			help='Password of the Duet 3D printer board')
 cliParser.add_argument('DELAY', type=float,
 			help='Time between snapshots in seconds')
 cliParser.add_argument('LENGTH', type=float,
@@ -21,6 +26,51 @@ cliParser.add_argument('OUTFILE', type=str,
 options = cliParser.parse_args()
 
 imgurl = "http://" + options.HOST + ":8080/?action=snapshot"
+
+def percent():
+	r = requests.get('http://' + str(options.PHOST) + '/rr_connect?password=' + str(options.PASSWORD))
+	percent = float(requests.get('http://' + str(options.HOST) + '/rr_status?type=3').json()["fractionPrinted"])
+	return percent
+
+def printing():
+	status = None
+	# If the printer gets disconnected, retry indefinitely
+	while status == None:
+		try:
+			r = requests.get('http://' + str(options.PHOST) + '/rr_connect?password=' + str(options.PASSWORD))
+			status = requests.get('http://' + str(options.HOST) + '/rr_status?type=3').json()["status"]
+			if status == "P": # processing
+				return True
+			elif status == "I": # idle
+				return False
+			elif status == "D":	# Pausing / Decelerating
+				return paused()
+			elif status == "S":	# Paused / Stopped
+				return paused()
+			# elif status == "F":	# Flashing new firmware
+			# 	return False
+			# elif status == "O":	# Off
+			# 	return False
+			# elif status == "H":	# Halted
+			# 	return False
+			# elif status == "R":	# Resuming
+			# 	return False
+			# elif status == "M":	# Simulating
+			# 	return False
+			# elif status == "B":	# Busy
+			# 	return False
+			# elif status == "T":	# Changing tool
+			# 	return False
+
+def paused():
+	while not status == "P": # Loop while paused and wait forever until we're printing again before returning True
+		r = requests.get('http://' + str(options.PHOST) + '/rr_connect?password=' + str(options.PASSWORD))
+		status = requests.get('http://' + str(options.HOST) + '/rr_status?type=3').json()["status"]
+		time.sleep(1)
+	return True
+
+
+
 
 tmpdir = mkdtemp()
 filenameformat = os.path.join(tmpdir, "%05d.jpg")
@@ -62,14 +112,14 @@ print(":: Starting Timelapse")
 
 count = 0
 
-while count < new_length/new_delay: # I think this will work
+while printing(): 
 	count += 1
 	response = urlopen(imgurl)
 	filename = filenameformat % count
 	f = open(filename,'bw')
 	f.write(response.read())
 	f.close
-	print("Image: %05i" % (count), end='\r')
+	print("Print Progress: %05i Image: %05i" % (percent(), count), end='\r')
 	sleep(new_delay)
 
 print()
