@@ -36,31 +36,30 @@ def printing():
 	status = None
 	# If the printer gets disconnected, retry indefinitely
 	while status == None:
-		try:
-			r = requests.get('http://' + str(options.PHOST) + '/rr_connect?password=' + str(options.PASSWORD))
-			status = requests.get('http://' + str(options.HOST) + '/rr_status?type=3').json()["status"]
-			if status == "P": # processing
-				return True
-			elif status == "I": # idle
-				return False
-			elif status == "D":	# Pausing / Decelerating
-				return paused()
-			elif status == "S":	# Paused / Stopped
-				return paused()
-			# elif status == "F":	# Flashing new firmware
-			# 	return False
-			# elif status == "O":	# Off
-			# 	return False
-			# elif status == "H":	# Halted
-			# 	return False
-			# elif status == "R":	# Resuming
-			# 	return False
-			# elif status == "M":	# Simulating
-			# 	return False
-			# elif status == "B":	# Busy
-			# 	return False
-			# elif status == "T":	# Changing tool
-			# 	return False
+		r = requests.get('http://' + str(options.PHOST) + '/rr_connect?password=' + str(options.PASSWORD))
+		status = requests.get('http://' + str(options.HOST) + '/rr_status?type=3').json()["status"]
+		if status == "P": # processing
+			return True
+		elif status == "I": # idle
+			return False
+		elif status == "D":	# Pausing / Decelerating
+			return paused()
+		elif status == "S":	# Paused / Stopped
+			return paused()
+		# elif status == "F":	# Flashing new firmware
+		# 	return False
+		# elif status == "O":	# Off
+		# 	return False
+		# elif status == "H":	# Halted
+		# 	return False
+		# elif status == "R":	# Resuming
+		# 	return False
+		# elif status == "M":	# Simulating
+		# 	return False
+		# elif status == "B":	# Busy
+		# 	return False
+		# elif status == "T":	# Changing tool
+		# 	return False
 
 def paused():
 	while not status == "P": # Loop while paused and wait forever until we're printing again before returning True
