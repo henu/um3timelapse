@@ -37,7 +37,7 @@ def printing():
 	# If the printer gets disconnected, retry indefinitely
 	while status == None:
 		r = requests.get('http://' + str(options.PHOST) + '/rr_connect?password=' + str(options.PASSWORD))
-		status = requests.get('http://' + str(options.HOST) + '/rr_status?type=3').json()["status"]
+		status = requests.get('http://' + str(options.PHOST) + '/rr_status?type=3').json()["status"]
 		if status == "P": # processing
 			return True
 		elif status == "I": # idle
@@ -64,7 +64,7 @@ def printing():
 def paused():
 	while not status == "P": # Loop while paused and wait forever until we're printing again before returning True
 		r = requests.get('http://' + str(options.PHOST) + '/rr_connect?password=' + str(options.PASSWORD))
-		status = requests.get('http://' + str(options.HOST) + '/rr_status?type=3').json()["status"]
+		status = requests.get('http://' + str(options.PHOST) + '/rr_status?type=3').json()["status"]
 		time.sleep(1)
 	return True
 
