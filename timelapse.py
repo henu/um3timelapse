@@ -63,8 +63,8 @@ def location_check(json_object, variant):
 	x = json_object["x"]
 	y = json_object["y"]
 	if variant == "Ultimaker 3":
-		if math.fabs(x-213) <= 2: #if the absolute value of x minus a number is less than or equal to 2
-			if math.fabs(y-189) <= 2 or math.fabs(y-207) <= 2 :
+		if math.fabs(x-213) <= 1: #if the absolute value of x minus a number is less than or equal to 2
+			if math.fabs(y-189) <= 2 or math.fabs(y-207) <= 1 :
 				return True
 	elif variant == "Ultimaker S5": 
 		if x == 330:
@@ -104,8 +104,8 @@ while printing():
 	print("Print progress: %s Image: %05i" % (progress(), count), end='\r')
 	# sleep(options.DELAY)
 	#sleep while printing a layer, wait for extruder position change
-	while not location_check(api.get("api/v1/printer/heads/0/position").json(), variant) and printing(): #location check should detect when printcore 2 is lifted back up
-		sleep(1)
+	while not location_check(api.get("api/v1/printer/heads/0/position").json(), variant) and printing(): #location check should detect when printcore 2 is moved up or down
+		sleep(0.5)
 	sleep(5) # I think this is necessary because of the way the printer cools down and reheats the print cores between switching. To prevent taking multiple pictures of the same layer.
 
 #caputre a few frames of postroll
