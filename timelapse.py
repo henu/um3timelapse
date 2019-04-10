@@ -64,7 +64,7 @@ def location_check(json_object, variant):
 	y = json_object["y"]
 	if variant == "Ultimaker 3":
 		if math.fabs(x-213) <= 1: #if the absolute value of x minus a number is less than or equal to 2
-			if math.fabs(y-189) <= 2 or math.fabs(y-207) <= 1 :
+			if math.fabs(y-189) <= 2 : #or math.fabs(y-207) <= 1
 				return True
 	elif variant == "Ultimaker S5": 
 		if x == 330:
