@@ -5,8 +5,6 @@ from requests import exceptions
 from tempfile import mkdtemp
 from urllib.request import urlopen
 from um3api import Ultimaker3
-import json
-import math
 import time
 import re
 import collections
@@ -17,25 +15,23 @@ cliParser = argparse.ArgumentParser(
 cliParser.add_argument(
     'HOST', type=str, help='IP address of the Ultimaker 3')
 cliParser.add_argument(
-    'POST_SEC', type=float, help='Seconds of postroll, or how much time to capture after the print is completed.')
-cliParser.add_argument(
     'OUTFILE', type=str, help='Name of the video file to create. Recommended formats are .mkv or .mp4.')
 options = cliParser.parse_args()
 
-imgurl = "http://" + options.HOST + ":8080/?action=snapshot"
+imgurl = f'http://{options.HOST}:8080/?action=snapshot'
 
-api = Ultimaker3(options.HOST, "Timelapse")
+api = Ultimaker3(options.HOST, 'Timelapse')
 
 
 def get_status():
     # If the printer gets disconnected, retry indefinitely
     while True:
         try:
-            status = api.get("api/v1/printer/status").json()
+            status = api.get('api/v1/printer/status').json()
             if status == 'idle':
                 return 'idle'
             elif status == 'printing':
-                state = api.get("api/v1/print_job/state").json()
+                state = api.get('api/v1/print_job/state').json()
                 if state == 'none':
                     time.sleep(0.25)
                     continue
@@ -51,29 +47,29 @@ def get_status():
 
 
 def print_error(err):
-    print("Connection error: {0}".format(err))
-    print("Retrying")
+    print('Connection error: {0}'.format(err))
+    print('Retrying')
     print()
 
 
 tmpdir = mkdtemp()
-filenameformat = os.path.join(tmpdir, "%05d.jpg")
-print(":: Saving images to", tmpdir)
+filenameformat = os.path.join(tmpdir, '%05d.jpg')
+print(':: Saving images to', tmpdir)
 
 if not os.path.exists(tmpdir):
     os.makedirs(tmpdir)
 
-print(":: Waiting for print to start")
+print(':: Waiting for print to start')
 while get_status() != 'printing':
     time.sleep(1)
-print(":: Printing")
+print(':: Printing')
 
 while get_status() == 'printing':
     # Take screenshot
     response = urlopen(imgurl)
 
     # Use current time and print head to form a filename that contains all the necessary data
-    printhead_pos = api.get("api/v1/printer/heads/0/position").json()
+    printhead_pos = api.get('api/v1/printer/heads/0/position').json()
     filename = '{}_{}_{}_{}.jpg'.format(
         time.time(),
         printhead_pos['x'],
@@ -88,7 +84,7 @@ while get_status() == 'printing':
     time.sleep(0.5)
 
 # Iterate all captured frames, and group them by their layer
-print(":: Blending captured images into frames")
+print(':: Blending captured images into frames')
 # First collect all images from same layer
 IMAGE_FILENAME_RE = re.compile('^(?P<timestamp>[\\d\\.]+)_(?P<x>[\\d\\.]+)_(?P<y>[\\d\\.]+)_(?P<z>[\\d\\.]+).jpg$')
 images_by_layers = collections.defaultdict(list)
@@ -111,8 +107,8 @@ for layer_key, layer_images in sorted(images_by_layers.items()):
     frame_num += 1
 
 print()
-print(":: Encoding video")
-ffmpegcmd = "ffmpeg -r 30 -i " + filenameformat + " -vcodec libx264 -preset veryslow -crf 18 -loglevel panic " + options.OUTFILE
+print(':: Encoding video')
+ffmpegcmd = f'ffmpeg -r 30 -i {filenameformat} -vcodec libx264 -preset veryslow -crf 18 -loglevel panic {options.OUTFILE}'
 print(ffmpegcmd)
 os.system(ffmpegcmd)
-print(":: Done!")
+print(':: Done!')
